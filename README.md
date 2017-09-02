@@ -5,4 +5,6 @@ Requires zeppelin-solidity
 
 More documentation available with next release
 
+This code is not yet production ready, please do not attempt to do so
+
 Please try to break something and open an issue or pull request!
