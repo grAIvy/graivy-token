@@ -9,6 +9,10 @@ This code is not yet production ready, please do not attempt to use real ETH
 
 Please try to break something and open an issue or pull request!
 
+Demo available at graivy.com/token
+
+Lots of stuff is still broken and contracts are migrating often
+
 npm install -g truffle
 
 npm install zeppelin-solidity
