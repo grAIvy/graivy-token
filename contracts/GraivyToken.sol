@@ -11,7 +11,7 @@ import './MintableToken.sol';
  */
 
 contract GraivyToken is MintableToken {
-  string public constant name = "grAIvy Tokens";
+  string public constant name = "Graivy Tokens";
   string public constant symbol = "GVY";
   uint8 public constant decimals = 18;
   string public version = 'GVY0.3.0';
