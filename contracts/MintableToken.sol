@@ -33,11 +33,11 @@ contract MintableToken is DistributableToken {
    * @dev Function to mint tokens
    * @param _to The address that will recieve the minted tokens.
    * @param amount calculated from msg.value and token modifiers
-   * @return True if the operation was successful including amount minted 
+   * @return True if the operation was successful including amount minted
    */
   function mint(address _to) canMint payable returns (bool, uint256 amount) {
     require(msg.value >= mintMinimum);
-    amount = msg.value.div(tokenWeight).div(supplyMod);
+    amount = msg.value.mul(tokenWeight).div(supplyMod);
     mintTracker += amount;
     totalSupply = totalSupply.add(amount);
     balances[_to] = balances[_to].add(amount);

@@ -20,9 +20,9 @@ contract GraivyToken is MintableToken {
   function GraivyToken() {
       totalSupply = 0;
       supplyMod = 1;
-      tokenWeight = 1000000000000000;
-      tokenCap = 200000000;
-      trackerThreshold = 10000000;
+      tokenWeight = 1000;
+      tokenCap = 200000000000000000000000000;
+      trackerThreshold = 10000000000000000000000000;
       mintMinimum = 1000000000000000;
       claimMinimum = 1000000000000000;
       claimLockTime = 24 hours;
