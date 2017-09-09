@@ -6,7 +6,7 @@ import 'zeppelin-solidity/contracts/token/StandardToken.sol';
 /**
  * @title Distributable token contract
  * @dev Enables minter contract ether distribution with lock time
- * @dev Issue: * https://github.com/graivy..
+ * @dev Issue: * https://github.com/graivy-token
  */
 
 contract DistributableToken is StandardToken {
