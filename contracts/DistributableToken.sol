@@ -10,13 +10,15 @@ import 'zeppelin-solidity/contracts/token/StandardToken.sol';
  */
 
 contract DistributableToken is StandardToken {
-  event Claim(address indexed owner, uint256 amount, uint256 etherAmount);
+  event Lock(address indexed owner, uint256 amount);
   event Unlock (address owner, uint256 storedTokens);
+  event Claim (address owner, uint256 amount);
 
 
   struct Account {
     uint256 storedTokens;
     uint releaseTime;
+    bool paid;
   }
 
   mapping(address => Account) accounts;
@@ -31,24 +33,37 @@ contract DistributableToken is StandardToken {
   }
 
   /**
-   * @dev Function to claim ether share
+   * @dev Function to lock GVY to claim ETH
    * @param amount The amount of GVY user wishes to claim ether with
-   * @param etherAmount is calculated from msg.value and token modifiers
-   * @return True if the operation was successful including amount minted 
+   * @return True if the operation was successful including amount minted
    */
-  function claim(uint256 amount) canClaim returns (bool, uint256 etherAmount, uint releaseTime) {
+  function lock(uint256 amount) canClaim returns (bool, uint releaseTime) {
     require(balanceOf(msg.sender) >= amount);
-    etherAmount = this.balance.div(totalSupply).mul(amount);
-    require(etherAmount >= claimMinimum);
-    require(etherAmount < this.balance);
     balances[msg.sender] = balances[msg.sender].sub(amount);
     balances[this] = balances[this].add(amount);
     releaseTime = block.timestamp.add(claimLockTime);
     accounts[msg.sender].storedTokens = amount;
     accounts[msg.sender].releaseTime = releaseTime;
-    msg.sender.transfer(etherAmount);
-    Claim(msg.sender, amount, etherAmount);
-    return (true, etherAmount, releaseTime);
+    accounts[msg.sender].paid = false;
+    Lock(msg.sender, amount);
+    return (true, releaseTime);
+  }
+
+  /**
+   * @dev Function to claim ETH.
+   * @return True if the operation was successful.
+   */
+  function claim() returns (bool) {
+    Account storage c = accounts[msg.sender];
+    require(c.paid == false);
+    uint256 stored = c.storedTokens * 10 ** (4);
+    uint256 weight = ((stored / totalSupply) + 5) / 10;
+    uint256 fixedWeight = weight.mul(this.balance);
+    uint256 amount = fixedWeight.div(1000);
+    msg.sender.transfer(amount);
+    c.paid = true;
+    Claim(msg.sender, amount);
+    return true;
   }
 
   /**
